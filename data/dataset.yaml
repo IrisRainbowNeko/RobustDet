@@ -1,0 +1,4 @@
+voc:
+  clean: JPEGImages
+coco:
+  clean: clean

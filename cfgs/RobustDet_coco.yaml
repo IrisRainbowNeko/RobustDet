@@ -1,0 +1,46 @@
+
+model:
+  backbone: 'vgg'
+  cfr: False
+  cfr_layer: 21
+  amp: False
+  cuda: True
+  multi_fc: False
+  k_count: 4
+
+attack:
+  adv_type: 'mtd'
+  atk_iters: 20
+  step_size: 8
+
+data:
+  dataset: 'COCO'
+  dataset_root: '../datas/coco2017/'
+  data_use: 'clean'
+  num_workers: 8
+
+train:
+  basenet: 'weights/ssd300_COCO_clean_final_300000.pth'
+  batch_size: 32
+  resume: null
+  start_iter: 0
+  multi_gpu: False
+  lr: 0.001
+  max_iter: 120000
+  momentum: 0.9
+  weight_decay: 0.0005
+  gamma: 0.1
+  focal: False
+  adc: 0
+  save_folder: 'weights/'
+  log_folder: 'logs/'
+
+test:
+  trained_model: ''
+  save_folder: 'eval/'
+  confidence_threshold: 0.01
+  top_k: 5
+  robust: True
+  con_weights: [1.,1.]
+  save_tp_fp: None
+  log_folder: 'logs/'

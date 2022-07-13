@@ -93,13 +93,13 @@ python train_robust.py --cfg cfgs/MTD_voc.yaml --adv_type mtd --data_use clean[2
 
 CWAT
 ```bash
-python train_robust.py --cfg cfgs/MTD.yaml --adv_type cwat --data_use clean[2007]+clean[2012] --multi_gpu False \
+python train_robust.py --cfg cfgs/MTD_voc.yaml --adv_type cwat --data_use clean[2007]+clean[2012] --multi_gpu False \
     --dataset_root <path_to_your_VOC_root>
 ```
 
 #### Evaluation
 ```bash
-python eval_attack.py --trained_model <path_to_your_trained_model> --data_use clean --adv_type cls
+python eval_attack.py --cfg cfgs/MTD_voc.yaml --trained_model <path_to_your_trained_model> --data_use clean --adv_type cls
 ```
 
 

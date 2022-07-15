@@ -54,7 +54,7 @@ Download [pretrained backbone and clean models](https://1drv.ms/u/s!Agabh9imkP8q
 
 To train RobustDet model on VOC dataset:
 ```bash
-python train_robust.py --cfg cfgs/RobustDet_voc.yaml --adv_type mtd --data_use clean[2007]+clean[2012] --multi_gpu False \
+python train_robust.py --cfg cfgs/RobustDet_voc.yaml --adv_type mtd --data_use clean --multi_gpu False \
     --basenet weights/ssd300_mAP_77.43_v2.pth --dataset_root <path_to_your_VOC_root>
 ```
 
@@ -87,13 +87,13 @@ But in this repo we provide the code that we reproduced.
 #### Training
 MTD
 ```bash
-python train_robust.py --cfg cfgs/MTD_voc.yaml --adv_type mtd --data_use clean[2007]+clean[2012] --multi_gpu False \
+python train_robust.py --cfg cfgs/MTD_voc.yaml --adv_type mtd --data_use clean --multi_gpu False \
     --dataset_root <path_to_your_VOC_root>
 ```
 
 CWAT
 ```bash
-python train_robust.py --cfg cfgs/MTD_voc.yaml --adv_type cwat --data_use clean[2007]+clean[2012] --multi_gpu False \
+python train_robust.py --cfg cfgs/MTD_voc.yaml --adv_type cwat --data_use clean --multi_gpu False \
     --dataset_root <path_to_your_VOC_root>
 ```
 

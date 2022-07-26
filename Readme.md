@@ -3,7 +3,7 @@
 <img src="assets/RobustDet.png" >
 
 ## Introduction
-This repo is the official PyTorch implementation of **ECCV2022 oral paper** "Adversarially-Aware Robust Object Detector".
+This repo is the official PyTorch implementation of **ECCV2022 oral paper** "[Adversarially-Aware Robust Object Detector](https://arxiv.org/abs/2207.06202)".
 
 RobustDet is an approach to improve the adversarial robustness of CNN-based object detectors.
 It aims to defends adversarial attacks specifically for object detectors.

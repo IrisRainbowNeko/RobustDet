@@ -42,6 +42,7 @@ def train():
     ssd_net = build_robust_ssd('train', cfg['min_dim'], cfg['num_classes'], amp=args.amp and args.multi_gpu,
                                CFR=args.cfr, CFR_layer=args.cfr_layer, multi_fc=args.multi_fc, K=args.k_count, backbone=args.backbone)
     net = ssd_net
+    summary(net, (3, 300, 300))
 
     if args.cuda:
         if args.multi_gpu:
@@ -77,7 +78,6 @@ def train():
     criterion_triplet = OnlineTripletLoss(0.6, pdist=pdist_l2 if args.multi_fc else pdist_js)
 
     net.train()
-    summary(net, (3, 300, 300))
     #print(net)
     # loss counters
     loc_loss = 0
@@ -155,14 +155,15 @@ def train():
             optimizer.zero_grad()
             with amp.autocast(enabled=args.amp):
                 if args.adc > 0:
-                    out1 = net(torch.cat((images, at_img), dim=0))
+                    adv_pred = net.module.disc(torch.cat((images, at_img)))
+                    out1 = net(torch.cat((images, at_img), dim=0), adv_pred=adv_pred)
                     if args.cfr:
                         recons1 = net.recons
                         logvar1 = net.logvar
                         mu1 = net.mu
-                    loss_tri, _ = criterion_triplet(net.adv_pred, adv_label)
+                    loss_tri, _ = criterion_triplet(adv_pred, adv_label)
 
-                    pred_adv = net.adv_pred.detach()[images.size(0):, :]
+                    pred_adv = adv_pred.detach()[images.size(0):, :]
                     sample_idx = sorted(random.sample(range(at_img.size(0)), args.adc))
                     img_sample = images[torch.tensor(sample_idx)]
                     targets_sample = [targets[x] for x in sample_idx]
@@ -173,8 +174,9 @@ def train():
                         mu2 = net.mu
                     out = (torch.cat((out1[0], out2[0]), dim=0), torch.cat((out1[1], out2[1]), dim=0), out1[2])
                 else:
-                    out = net(torch.cat((images, at_img), dim=0))
-                    loss_tri, _ = criterion_triplet(net.adv_pred, adv_label)
+                    adv_pred = net.module.disc(torch.cat((images, at_img)))
+                    out = net(torch.cat((images, at_img), dim=0), adv_pred=adv_pred)
+                    loss_tri, _ = criterion_triplet(adv_pred, adv_label)
 
                 # backprop
                 loss_l, loss_c = criterion_mlb(out, targets + at_targets + targets_sample if args.adc > 0 else targets + at_targets,

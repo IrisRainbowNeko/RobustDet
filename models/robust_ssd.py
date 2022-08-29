@@ -8,6 +8,8 @@ from dconv import *
 from torch.cuda import amp
 from models import *
 
+ssd_adv_pred = {}
+
 class RobustSSD(nn.Module):
     """Modified from Single Shot Multibox Architecture
 
@@ -47,12 +49,16 @@ class RobustSSD(nn.Module):
         #input dynamic convolution weights to each DynamicConv2d layer via hook
         for layer in self.modules():
             if isinstance(layer, DynamicConv2d) or (isinstance(layer, ProbConv2d) and isinstance(layer.conv_mean, DynamicConv2d)):
-                layer.register_forward_pre_hook(lambda module, x:(x[0], self.adv_pred))
+                layer.register_forward_pre_hook(lambda module, x:(x[0], ssd_adv_pred[x[0].device]))
 
         if phase == 'test':
             self.softmax = nn.Softmax(dim=-1)
             #self.detect = Detect(num_classes, 0, 200, 0.01, 0.45)
             Detect.set(num_classes, 0, 200, 0.01, 0.45)
+
+    @property
+    def adv_pred(self):
+        return ssd_adv_pred[self.loc[0].weight.device]
 
     def forward(self, x, adv_pred=None):
         """Applies network layers and ops on input image(s) x.
@@ -78,7 +84,7 @@ class RobustSSD(nn.Module):
         conf = list()
 
         adv_pred=adv_pred if adv_pred is not None else self.disc(x) #AID预测动态卷积权重
-        self.adv_pred=adv_pred
+        ssd_adv_pred[adv_pred.device] = adv_pred
 
         if self.backbone == 'vgg':
             # apply vgg up to conv4_3 relu

@@ -87,13 +87,13 @@ But in this repo we provide the code that we reproduced.
 #### Training
 MTD
 ```bash
-python train_robust.py --cfg cfgs/MTD_voc.yaml --adv_type mtd --data_use clean --multi_gpu False \
+python train_adv.py --cfg cfgs/MTD_voc.yaml --adv_type mtd --data_use clean --multi_gpu False \
     --dataset_root <path_to_your_VOC_root>
 ```
 
 CWAT
 ```bash
-python train_robust.py --cfg cfgs/MTD_voc.yaml --adv_type cwat --data_use clean --multi_gpu False \
+python train_adv.py --cfg cfgs/MTD_voc.yaml --adv_type cwat --data_use clean --multi_gpu False \
     --dataset_root <path_to_your_VOC_root>
 ```
 

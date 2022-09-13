@@ -36,7 +36,7 @@ test:
   save_folder: 'eval/'
   confidence_threshold: 0.01
   top_k: 5
-  robust: True
+  robust: False
   con_weights: [1.,1.]
   save_tp_fp: None
   log_folder: 'logs/'

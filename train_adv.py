@@ -155,7 +155,7 @@ def train():
         gvars.inter_iteration+=1
 
     pgd.set_call_back(inter_iter)
-    for iteration in range(args.start_iter, args.max_iter):
+    for iteration in range(args.start_iter//pgd.iters, args.max_iter//pgd.iters):
         # load adv train data
         images, targets = batch_iterator_adv.next()
 
